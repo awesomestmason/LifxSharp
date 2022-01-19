@@ -1,4 +1,6 @@
 ﻿using RestSharp;
+using RestSharp.Authenticators;
+using RestSharp.Serializers.NewtonsoftJson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LifxSharp.Http.Client
 {
-    public class LifxHttpClient
+    public partial class LifxHttpClient : IDisposable
     {
         private const string ApiVersion = "1";
         private const string BaseUrl = "api.lifx.com";
@@ -18,7 +20,6 @@ namespace LifxSharp.Http.Client
         public LifxHttpClient(string appToken, string baseUrl = BaseUrl, IWebProxy? proxy = null) => Initialize(baseUrl, appToken);
         public IWebProxy WebProxy { get; private set; }
         public string AppToken { get; private set; }
-
 
         private void Initialize(string baseUrl,  string appToken)
         {
@@ -38,9 +39,18 @@ namespace LifxSharp.Http.Client
             var options = new RestClientOptions(new Uri(string.Format("{0}://{1}/v{2}/", httpScheme, baseUrl, ApiVersion)))
             {
                 Proxy = WebProxy,
-            }
-            _client = new RestClient(options);
-            _client.AddDefaultHeader("Authorization", $"Bearer {appToken}");
+            };
+            _client = new RestClient(options)
+            {
+                Authenticator = new JwtAuthenticator(AppToken)
+            };
+            _client.UseNewtonsoftJson();
+
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
         }
     }
 }
