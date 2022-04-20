@@ -2,7 +2,6 @@
 
 namespace LifxSharp.Http.Objects
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Color
     {
         [JsonProperty("hue")]

@@ -19,5 +19,6 @@ namespace LifxSharp.Http.Tests.Client
                 Assert.NotEqual(DateTime.MinValue, bulb.LastSeen);
             }
         }
+
     }
 }

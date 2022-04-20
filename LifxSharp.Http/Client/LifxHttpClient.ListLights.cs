@@ -1,5 +1,6 @@
 ﻿using LifxSharp.Http.Helpers;
 using LifxSharp.Http.Objects;
+using LifxSharp.Http.Responses;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,13 @@ namespace LifxSharp.Http.Client
 {
     public partial class LifxHttpClient
     {
-        public async Task<Bulb[]> ListLightsAsync(string selector)
+        public async Task<ListLightsResponse> ListLightsAsync(string selector)
         {
             var request = new RestRequest("lights/{selector}");
             request.AddUrlSegment("selector", selector);
-            return await _client.GetAsync<Bulb[]>(request)
-                                .ConfigureAwait(false)
-                                ?? Array.Empty<Bulb>();
+            return await _client.GetAsync<ListLightsResponse>(request).ConfigureAwait(false);
         }
-        public async Task<Bulb[]> ListLightsAsync() => await ListLightsAsync(Selector.All());
+        public async Task<ListLightsResponse> ListLightsAsync() => await ListLightsAsync(Selector.All());
 
     }
 }

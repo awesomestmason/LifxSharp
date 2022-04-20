@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serializers.NewtonsoftJson;
 using System;
@@ -44,7 +45,14 @@ namespace LifxSharp.Http.Client
             {
                 Authenticator = new JwtAuthenticator(AppToken)
             };
-            _client.UseNewtonsoftJson();
+            _client.UseNewtonsoftJson(new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = new List<JsonConverter>()
+                {
+                    new Newtonsoft.Json.Converters.StringEnumConverter()
+                }
+            });
 
         }
 
