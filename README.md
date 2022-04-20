@@ -30,3 +30,32 @@ var color = new LifxColor()
 var request = new SetStateRequest() { Color = color.AsLifxColorString(), Duration = 15 };
 await client.SetState(selector, request);
 ```
+### Building selectors
+Lifx uses selectors to determine which bulbs to effect. Here are some examples:
+
+Select all lights
+```
+var selector = new SelectorBuilder(Selector.All()).Build();
+```
+Select all lights in zone 1 with label "customLabel" or that are in the kitchen. 
+```
+var selector = new SelectorBuilder(Selector.Label("customLabel"))
+    .Or(Selector.Location("kitchen"))
+    .Zone(1)
+    .Build();
+```
+
+Select all lights in zones 1-5 with label "customLabel" or that are in the kitchen. 
+```
+var selector = new SelectorBuilder(Selector.Label("customLabel"))
+    .Or(Selector.Location("kitchen"))
+    .ZoneRange(1, 5)
+    .Build();
+```
+Select all lights with labels "customLabel1", "customLabel2" or "customLabel3".
+```
+var selector = new SelectorBuilder(Selector.Label("customLabel1"))
+    .Or(Selector.Label("customLabel2"))
+    .Or(Selector.Label("customLabel3"))
+    .Build();
+```
