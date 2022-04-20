@@ -1,4 +1,5 @@
 ﻿using LifxSharp.Http.Client;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace LifxSharp.Http.Tests.Client
         private LifxHttpClient client;
         public LifxHttpClientTests()
         {
-            client = new LifxHttpClient("c84c300db65d9a1ed88fa523fc9aa077c8d244bbe042a22f69ffa620967ade21");
+            var config = new ConfigurationBuilder()
+                .AddUserSecrets<LifxHttpClientTests>()
+                .Build();
+            client = new LifxHttpClient(config["LifxApiKey"]);
         }
     }
 }

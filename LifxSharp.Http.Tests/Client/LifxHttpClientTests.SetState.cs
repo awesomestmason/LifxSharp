@@ -1,4 +1,5 @@
 ﻿using LifxSharp.Http.Helpers;
+using LifxSharp.Http.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,11 @@ namespace LifxSharp.Http.Tests.Client
     {
         [Fact]
         public async Task SetAllLightStates() {
-            var selector = new SelectorBuilder(Selector.All()).Build();
+            var selector = new SelectorBuilder(Selector.Label("customLabel1"))
+                .Or(Selector.Label("customLabel2"))
+                .Or(Selector.Label("customLabel3"))
+                .Build();
+
             var color = new LifxColor()
             {
                 Brightness = 1,
@@ -20,7 +25,8 @@ namespace LifxSharp.Http.Tests.Client
                 Kelvin = 4500,
                 Saturation = 1
             };
-            var result = await client.SetState(selector, color: color, duration: 15);
+            var request = new SetStateRequest() { Color = color.AsLifxColorString(), Duration = 15 };
+            var result = await client.SetState(selector, request);
             Assert.NotNull(result);
             
         }

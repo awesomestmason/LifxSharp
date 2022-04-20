@@ -14,7 +14,7 @@ namespace LifxSharp.Http.Tests.Client
         public async Task ListLights()
         {
             var result = await client.ListLightsAsync();
-            foreach (var bulb in result)
+            foreach (var bulb in result.Bulbs)
             {
                 Assert.NotEqual(DateTime.MinValue, bulb.LastSeen);
             }
